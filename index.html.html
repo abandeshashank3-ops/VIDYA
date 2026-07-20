@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VidyaSetu — AI Scholarship Discovery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16223f;
+    --ink-soft:#2c3a5e;
+    --paper:#f7f7f2;
+    --paper-raised:#ffffff;
+    --line:#d8d6c8;
+    --seal:#a83226;
+    --seal-soft:#c24a3c;
+    --gold:#b8902b;
+    --gold-soft:#e4c876;
+    --ink-mute:#5b6478;
+    --green-ok:#3c6e4d;
+
+    --font-display:'Fraunces', serif;
+    --font-body:'Source Sans 3', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--paper);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(22,34,63,0.025) 0px, rgba(22,34,63,0.025) 1px, transparent 1px, transparent 32px);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+
+  ::selection{background:var(--gold-soft); color:var(--ink);}
+
+  :focus-visible{outline:2px solid var(--seal); outline-offset:3px;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead{
+    border-bottom:2px solid var(--ink);
+    background:var(--paper-raised);
+  }
+  .masthead-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:1180px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:baseline; gap:10px;}
+  .brand-mark{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:1.5rem;
+    letter-spacing:0.01em;
+  }
+  .brand-mark span{color:var(--seal);}
+  .brand-sub{
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-mute);
+    border-left:1px solid var(--line);
+    padding-left:10px;
+  }
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:54px 0 42px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:22px;
+    align-items:start;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--seal);
+    margin-bottom:20px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px; background:var(--seal);
+  }
+  .hero h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(2.4rem, 4.2vw, 3.6rem);
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--seal);
+    font-weight:700;
+  }
+  .hero p.lede{
+    margin-top:18px;
+    font-size:1.02rem;
+    color:var(--ink-soft);
+    max-width:64ch;
+  }
+  .hero-cta{
+    margin-top:24px;
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.95rem;
+    padding:13px 24px;
+    border-radius:2px;
+    border:1.5px solid var(--ink);
+    cursor:pointer;
+    transition:transform .15s ease, background .15s ease, color .15s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .btn-primary:hover{background:var(--seal); border-color:var(--seal); transform:translateY(-1px);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+  }
+  .btn-ghost:hover{background:var(--ink); color:var(--paper); transform:translateY(-1px);}
+
+  /* ---------- SECTION LABELS ---------- */
+  .section{padding:64px 0;}
+  .section-head{
+    display:flex; align-items:baseline; gap:18px;
+    margin-bottom:38px;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:16px;
+  }
+  .section-num{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--seal);
+    letter-spacing:0.08em;
+  }
+  .section-head h2{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.9rem;
+    color:var(--ink);
+  }
+  .section-sub{
+    margin-left:auto;
+    font-size:0.85rem;
+    color:var(--ink-mute);
+    max-width:32ch;
+    text-align:right;
+  }
+
+  /* ---------- PROFILE FORM ---------- */
+  .form-panel{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    padding:8px;
+  }
+  .field-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--line);
+  }
+  .field{
+    background:var(--paper-raised);
+    padding:22px 26px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .field-num{
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    color:var(--seal);
+    letter-spacing:0.1em;
+  }
+  .field label.field-title{
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--ink);
+  }
+  select, input[type="number"], input[type="text"]{
+    font-family:var(--font-body);
+    font-size:0.95rem;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:2px;
+    appearance:none;
+    -webkit-appearance:none;
+  }
+  select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2316223f' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    padding-right:32px;
+  }
+  select:focus, input:focus{border-color:var(--ink);}
+  .checks{display:flex; gap:18px; flex-wrap:wrap; margin-top:2px;}
+  .check-opt{
+    display:flex; align-items:center; gap:7px;
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .check-opt input{accent-color:var(--seal); width:15px; height:15px;}
+
+  .form-submit-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 26px;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .form-hint{font-size:0.78rem; color:var(--ink-mute); font-family:var(--font-mono);}
+
+  /* ---------- RESULTS ---------- */
+  #results-area{margin-top:46px;}
+  .results-meta{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:22px; flex-wrap:wrap; gap:10px;
+  }
+  .results-meta h3{
+    font-family:var(--font-display);
+    font-size:1.3rem;
+    font-weight:600;
+  }
+  .results-meta .count{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--ink-mute);
+  }
+
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:22px;
+  }
+
+  .schol-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    padding:22px 22px 20px;
+    position:relative;
+    display:flex; flex-direction:column; gap:14px;
+    transition:box-shadow .18s ease, transform .18s ease;
+  }
+  .schol-card:hover{box-shadow:5px 5px 0 -2px var(--line); transform:translate(-2px,-2px);}
+
+  .stamp{
+    position:absolute; top:16px; right:16px;
+    width:64px; height:64px;
+    border:2px solid var(--seal);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-9deg);
+    color:var(--seal);
+    font-family:var(--font-mono);
+    text-align:center;
+    line-height:1.05;
+    opacity:0.92;
+  }
+  .stamp .pct{font-size:1.05rem; font-weight:700;}
+  .stamp .word{font-size:0.44rem; letter-spacing:0.06em; text-transform:uppercase;}
+  .stamp.low{border-color:var(--ink-mute); color:var(--ink-mute);}
+  .stamp.mid{border-color:var(--gold); color:var(--gold);}
+
+  .schol-card h4{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.15rem;
+    line-height:1.25;
+    max-width:80%;
+    color:var(--ink);
+  }
+  .schol-tags{display:flex; gap:6px; flex-wrap:wrap;}
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.65rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    border:1px solid var(--line);
+    color:var(--ink-mute);
+  }
+  .schol-desc{font-size:0.87rem; color:var(--ink-soft);}
+  .schol-data{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;
+    border-top:1px dashed var(--line);
+    padding-top:12px;
+  }
+  .schol-data div{display:flex; flex-direction:column; gap:2px;}
+  .schol-data .k{font-size:0.66rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-mute);}
+  .schol-data .v{font-family:var(--font-mono); font-size:0.85rem; color:var(--ink);}
+  .schol-link{
+    margin-top:4px;
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    font-weight:600;
+    color:var(--seal);
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .schol-link:hover{text-decoration:underline;}
+
+  .empty-state{
+    padding:50px 20px;
+    text-align:center;
+    border:1px dashed var(--line);
+    color:var(--ink-mute);
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+  }
+
+  /* ---------- BROWSE / FILTER ---------- */
+  .filter-bar{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    margin-bottom:26px;
+  }
+  .filter-bar input[type="search"]{
+    flex:1 1 240px;
+    font-family:var(--font-body);
+    padding:12px 14px;
+    border:1px solid var(--ink);
+    background:var(--paper-raised);
+    font-size:0.92rem;
+  }
+  .chip{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:9px 14px;
+    border:1px solid var(--line);
+    background:var(--paper-raised);
+    cursor:pointer;
+    color:var(--ink-soft);
+    transition:all .15s ease;
+  }
+  .chip.active, .chip:hover{
+    border-color:var(--ink);
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .all-india-links{
+    margin-bottom:22px;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    background:var(--paper-raised);
+  }
+  .all-india-links h3{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.05rem;
+    margin-bottom:10px;
+    color:var(--ink);
+  }
+  .all-india-links ul{
+    list-style:none;
+    display:grid;
+    gap:8px;
+  }
+  .all-india-links li{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    padding:8px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .all-india-links li:last-child{border-bottom:none; padding-bottom:0;}
+  .all-india-links a{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    font-weight:600;
+    color:var(--seal);
+  }
+  .all-india-links a:hover{text-decoration:underline;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:2px solid var(--ink);
+    padding:36px 0 30px;
+    margin-top:20px;
+  }
+  .footer-grid{
+    display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+  }
+  .footer-note{
+    font-size:0.8rem; color:var(--ink-mute); max-width:52ch;
+  }
+  .footer-mark{
+    font-family:var(--font-display); font-weight:700; font-size:1.1rem;
+  }
+
+  @media (max-width: 860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .field-grid{grid-template-columns:1fr;}
+    .section-sub{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <div class="brand-mark">Vidya<span>Setu</span></div>
+      <div class="brand-sub">AI Scholarship Discovery</div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Built for Indian students</div>
+      <h1>Find the scholarship that was <em>meant for you.</em></h1>
+      <p class="lede">Fill in one honest profile — education level, category, income, state — and VidyaSetu's matching engine checks it against every scheme in the register, then ranks what you actually qualify for.</p>
+      <div class="hero-cta">
+        <a href="#profile" class="btn btn-primary">Build my match profile ↓</a>
+        <a href="#browse" class="btn btn-ghost">Browse the full register</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="profile">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>Your match profile</h2>
+      <span class="section-sub">Seven fields. Nothing is stored — this runs entirely in your browser.</span>
+    </div>
+
+    <form class="form-panel" id="profile-form">
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-num">FIELD 01</span>
+          <label class="field-title" for="f-level">Current education level</label>
+          <select id="f-level">
+            <option value="school">School (Class 9–12)</option>
+            <option value="diploma">Diploma / Polytechnic</option>
+            <option value="ug" selected>Undergraduate</option>
+            <option value="pg">Postgraduate</option>
+            <option value="phd">PhD / Research</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="field-num">FIELD 02</span>
+          <label class="field-title" for="f-category">Social category</label>
+          <select id="f-category">
+            <option value="general">General</option>
+            <option value="ews">EWS</option>
+            <option value="obc">OBC</option>
+            <option value="sc">SC</option>
+            <option value="st">ST</option>
+            <option value="minority">Minority</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="field-num">FIELD 03</span>
+          <label class="field-title" for="f-income">Annual family income (₹)</label>
+          <input type="number" id="f-income" placeholder="e.g. 250000" min="0" step="1000">
+        </div>
+
+        <div class="field">
+          <span class="field-num">FIELD 04</span>
+          <label class="field-title" for="f-state">State / UT of domicile</label>
+          <select id="f-state">
+            <option value="all">Maharashtra</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="field-num">FIELD 05</span>
+          <label class="field-title" for="f-gender">Gender</label>
+          <select id="f-gender">
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="field-num">FIELD 06</span>
+          <span class="field-title">Additional status</span>
+          <div class="checks">
+            <label class="check-opt"><input type="checkbox" id="f-disability"> Person with disability</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-submit-row">
+        <span class="form-hint">Matching runs instantly — no submission is sent anywhere.</span>
+        <button type="submit" class="btn btn-primary">Find my matches →</button>
+      </div>
+    </form>
+
+    <div id="results-area"></div>
+  </div>
+</section>
+
+<section class="section" id="browse">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Full scholarship register</h2>
+      <span class="section-sub">Search or filter without a profile — for teachers curating lists, or browsing broadly.</span>
+    </div>
+
+    <div class="filter-bar">
+      <input type="search" id="search-box" placeholder="Search by name, e.g. &quot;INSPIRE&quot; or &quot;post-matric&quot;">
+      <button class="chip active" data-filter="all">All levels</button>
+      <button class="chip" data-filter="school">School</button>
+      <button class="chip" data-filter="diploma">Diploma</button>
+      <button class="chip" data-filter="ug">UG</button>
+      <button class="chip" data-filter="pg">PG</button>
+      <button class="chip" data-filter="phd">PhD</button>
+    </div>
+
+    <div class="all-india-links">
+      <h3>All-India scholarship portals</h3>
+      <ul id="all-india-links-list"></ul>
+    </div>
+
+    <div class="card-grid" id="browse-grid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-mark">VidyaSetu</div>
+      <p class="footer-note" style="margin-top:8px;">An independent discovery tool, not affiliated with the Government of India or any state board. Scheme details change — the official notification always overrides what's shown here.</p>
+    </div>
+    <div class="footer-note">Register last reviewed: July 2026<br>Built as a single-file, offline-first reference.</div>
+  </div>
+</footer>
+
+<script>
+/* ============ DATA ============ */
+const SCHOLARSHIPS = [
+  {id:1, name:"National Means-cum-Merit Scholarship (NMMS)", level:"school", category:"all", maxIncome:350000, state:"all", gender:"all", disability:false, amount:"₹12,000 / year", deadline:"31 Oct 2026", link:"https://scholarships.gov.in", desc:"For meritorious students from economically weaker sections to prevent drop-out at Class 9."},
+  {id:2, name:"Pre-Matric Scholarship for SC Students", level:"school", category:"sc", maxIncome:250000, state:"all", gender:"all", disability:false, amount:"Up to ₹5,000 / year", deadline:"30 Sep 2026", link:"https://scholarships.gov.in", desc:"Central scheme for SC students in Classes 9 and 10 to reduce drop-out rates."},
+  {id:3, name:"PM YASASVI Scholarship (OBC/EBC/DNT)", level:"school", category:"obc", maxIncome:250000, state:"all", gender:"all", disability:false, amount:"₹75,000–1,25,000 / year", deadline:"31 Aug 2026", link:"https://yet.nta.ac.in", desc:"Entrance-test based scheme for OBC, EBC and DNT students at school and college level."},
+  {id:4, name:"Post-Matric Scholarship for ST Students", level:"ug", category:"st", maxIncome:250000, state:"all", gender:"all", disability:false, amount:"Course-linked + maintenance", deadline:"30 Nov 2026", link:"https://scholarships.gov.in", desc:"Covers tuition and maintenance allowance for ST students pursuing UG/PG courses."},
+  {id:5, name:"AICTE Pragati Scholarship for Girls", level:"diploma", category:"all", maxIncome:800000, state:"all", gender:"female", disability:false, amount:"₹50,000 / year", deadline:"15 Nov 2026", link:"https://www.aicte-pragati-saksham-gov.in", desc:"For girl students in AICTE-approved technical diploma and degree programmes, max 2 per family."},
+  {id:6, name:"AICTE Saksham Scholarship (PwD)", level:"diploma", category:"all", maxIncome:800000, state:"all", gender:"all", disability:true, amount:"₹50,000 / year", deadline:"15 Nov 2026", link:"https://www.aicte-pragati-saksham-gov.in", desc:"Support for specially-abled students in AICTE-approved technical institutions."},
+  {id:7, name:"Central Sector Scheme of Scholarship", level:"ug", category:"all", maxIncome:450000, state:"all", gender:"all", disability:false, amount:"₹10,000–20,000 / year", deadline:"31 Oct 2026", link:"https://scholarships.gov.in", desc:"For top-performing Class 12 students (above 80th percentile) continuing to UG studies."},
+  {id:8, name:"INSPIRE Scholarship for Higher Education (SHE)", level:"ug", category:"all", maxIncome:0, state:"all", gender:"all", disability:false, amount:"₹80,000 / year", deadline:"31 Oct 2026", link:"https://online-inspire.gov.in", desc:"For students in top 1% of Class 12 boards pursuing Natural Sciences at UG/PG level."},
+  {id:9, name:"Kishore Vaigyanik Protsahan Yojana (KVPY-successor)", level:"school", category:"all", maxIncome:0, state:"all", gender:"all", disability:false, amount:"₹5,000–7,000 / month", deadline:"Check current cycle", link:"https://online-inspire.gov.in", desc:"Fellowship encouraging students to pursue basic science research careers."},
+  {id:10, name:"Maulana Azad National Fellowship (Minority)", level:"phd", category:"minority", maxIncome:600000, state:"all", gender:"all", disability:false, amount:"UGC fellowship rates", deadline:"31 Dec 2026", link:"https://www.education.gov.in", desc:"Fellowship for minority community students pursuing M.Phil/PhD."},
+  {id:11, name:"Begum Hazrat Mahal National Scholarship", level:"school", category:"minority", maxIncome:200000, state:"all", gender:"female", disability:false, amount:"₹5,000–12,000 / year", deadline:"30 Sep 2026", link:"https://www.momascholarship.gov.in", desc:"For meritorious minority-community girl students in Classes 9–12."},
+  {id:12, name:"Rajarshi Chhatrapati Shahu Maharaj Scholarship (Maharashtra)", level:"ug", category:"all", maxIncome:800000, state:"maharashtra", gender:"all", disability:false, amount:"Tuition + exam fee waiver", deadline:"Rolling, per academic year", link:"https://mahadbt.maharashtra.gov.in", desc:"Fee reimbursement scheme for economically weaker students in professional courses in Maharashtra."},
+  {id:13, name:"EBC (Economically Backward Class) Scholarship — Maharashtra", level:"ug", category:"ews", maxIncome:800000, state:"maharashtra", gender:"all", disability:false, amount:"Tuition fee reimbursement", deadline:"Rolling, per academic year", link:"https://mahadbt.maharashtra.gov.in", desc:"State scheme for general-category economically backward students in professional courses."},
+  {id:14, name:"Rajarshi Shahu Maharaj Merit Scholarship (School)", level:"school", category:"all", maxIncome:100000, state:"maharashtra", gender:"all", disability:false, amount:"₹1,000–5,000 / year", deadline:"30 Sep 2026", link:"https://mahadbt.maharashtra.gov.in", desc:"Merit scholarship for economically weaker school students in Maharashtra."},
+  {id:15, name:"Savitribai Phule Scholarship for Girls (Maharashtra)", level:"school", category:"all", maxIncome:0, state:"maharashtra", gender:"female", disability:false, amount:"Tuition-linked", deadline:"Rolling", link:"https://mahadbt.maharashtra.gov.in", desc:"Encourages girl-child education across Maharashtra government and aided schools."},
+  {id:16, name:"National Fellowship for SC Students (NFSC)", level:"phd", category:"sc", maxIncome:600000, state:"all", gender:"all", disability:false, amount:"UGC JRF-equivalent", deadline:"31 Dec 2026", link:"https://scholarships.gov.in", desc:"Fellowship for SC students pursuing M.Phil and PhD in Indian universities."},
+  {id:17, name:"National Overseas Scholarship (SC/ST/Landless)", level:"pg", category:"sc", maxIncome:800000, state:"all", gender:"all", disability:false, amount:"Full funding abroad", deadline:"31 Mar 2027", link:"https://www.education.gov.in", desc:"Fully funds Masters/PhD study abroad for select SC/ST/denotified-tribe students."},
+  {id:18, name:"Fulbright-Nehru Master's Fellowship", level:"pg", category:"all", maxIncome:0, state:"all", gender:"all", disability:false, amount:"Full funding, USA", deadline:"15 May 2027", link:"https://www.usief.org.in", desc:"Open merit fellowship for Indian graduates to pursue Master's programmes in the US."},
+  {id:19, name:"LIC Golden Jubilee Scholarship", level:"ug", category:"ews", maxIncome:250000, state:"all", gender:"all", disability:false, amount:"₹500–1,500 / month", deadline:"30 Sep 2026", link:"https://licindia.in", desc:"Merit-cum-means scholarship for children of low-income families pursuing UG/professional courses."},
+  {id:20, name:"Sitaram Jindal Foundation Scholarship", level:"diploma", category:"ews", maxIncome:300000, state:"all", gender:"all", disability:false, amount:"₹500–1,500 / month", deadline:"31 Jul 2026", link:"https://sitaramjindalfoundation.org", desc:"Private-trust scholarship covering school, ITI, diploma and professional courses nationally."},
+  {id:21, name:"PM CARES for Children Scholarship", level:"school", category:"all", maxIncome:0, state:"all", gender:"all", disability:false, amount:"Full education support", deadline:"Rolling", link:"https://pmcaresforchildren.in", desc:"Support for children who lost parents/guardians to COVID-19, up to age 23."},
+  {id:22, name:"Swami Vivekananda Merit-cum-Means (Maharashtra)", level:"diploma", category:"all", maxIncome:800000, state:"maharashtra", gender:"all", disability:false, amount:"Tuition + maintenance", deadline:"Rolling, per academic year", link:"https://mahadbt.maharashtra.gov.in", desc:"State scheme supporting diploma and degree students from economically weaker households."},
+];
+
+const STATE_LABELS = {all:"All-India", maharashtra:"Maharashtra"};
+const LEVEL_LABELS = {school:"School", diploma:"Diploma", ug:"Undergraduate", pg:"Postgraduate", phd:"PhD"};
+const CATEGORY_LABELS = {all:"All categories", general:"General", ews:"EWS", obc:"OBC", sc:"SC", st:"ST", minority:"Minority"};
+
+function renderAllIndiaLinks(){
+  const listEl = document.getElementById('all-india-links-list');
+  if (!listEl) return;
+
+  const allIndia = SCHOLARSHIPS
+    .filter(s => s.state === 'all')
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  listEl.innerHTML = allIndia.map(s => `
+    <li>
+      <span>${s.name}</span>
+      <a href="${s.link}" target="_blank" rel="noopener">Open official portal</a>
+    </li>`).join('');
+}
+
+renderAllIndiaLinks();
+
+/* ============ MATCH ENGINE ============ */
+function scoreScholarship(schol, profile){
+  if (schol.level !== profile.level) return null; // level mismatch = not eligible
+
+  let score = 0;
+  let maxScore = 0;
+
+  // category (weight 30)
+  maxScore += 30;
+  if (schol.category === 'all') score += 30;
+  else if (schol.category === profile.category) score += 30;
+  else if (profile.category === 'ews' && schol.category === 'general') score += 10;
+  else return null; // hard mismatch on reserved-category scheme
+
+  // income (weight 30)
+  maxScore += 30;
+  if (schol.maxIncome === 0) score += 30; // no income cap
+  else if (profile.income && profile.income <= schol.maxIncome) score += 30;
+  else if (!profile.income) score += 15; // unknown, partial credit
+  else return null; // over income limit
+
+  // state (weight 20)
+  maxScore += 20;
+  if (schol.state === 'all') score += 20;
+  else if (schol.state === profile.state) score += 20;
+  else return null;
+
+  // gender (weight 10)
+  maxScore += 10;
+  if (schol.gender === 'all') score += 10;
+  else if (schol.gender === profile.gender) score += 10;
+  else return null;
+
+  // disability bonus (weight 5)
+  maxScore += 5;
+  if (schol.disability) {
+    if (profile.disability) score += 5;
+    else return null; // scheme reserved for PwD
+  } else {
+    score += 5;
+  }
+
+  return Math.round((score / maxScore) * 100);
+}
+
+function stampClass(pct){
+  if (pct >= 80) return '';
+  if (pct >= 55) return 'mid';
+  return 'low';
+}
+
+function cardHTML(schol, pct){
+  const stampBlock = (pct !== null) ? `
+    <div class="stamp ${stampClass(pct)}">
+      <div>
+        <div class="pct">${pct}%</div>
+        <div class="word">Match</div>
+      </div>
+    </div>` : '';
+
+  return `
+    <div class="schol-card">
+      ${stampBlock}
+      <h4>${schol.name}</h4>
+      <div class="schol-tags">
+        <span class="tag">${LEVEL_LABELS[schol.level]}</span>
+        <span class="tag">${CATEGORY_LABELS[schol.category]}</span>
+        <span class="tag">${STATE_LABELS[schol.state] || schol.state}</span>
+      </div>
+      <p class="schol-desc">${schol.desc}</p>
+      <div class="schol-data">
+        <div><span class="k">Amount</span><span class="v">${schol.amount}</span></div>
+        <div><span class="k">Deadline</span><span class="v">${schol.deadline}</span></div>
+      </div>
+      <a class="schol-link" href="${schol.link}" target="_blank" rel="noopener">Official portal →</a>
+    </div>`;
+}
+
+/* ============ PROFILE FORM SUBMIT ============ */
+document.getElementById('profile-form').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const profile = {
+    level: document.getElementById('f-level').value,
+    category: document.getElementById('f-category').value,
+    income: parseInt(document.getElementById('f-income').value) || 0,
+    state: document.getElementById('f-state').value === 'all' ? 'maharashtra' : document.getElementById('f-state').value,
+    gender: document.getElementById('f-gender').value,
+    disability: document.getElementById('f-disability').checked,
+  };
+
+  const matches = SCHOLARSHIPS
+    .map(s => ({schol:s, pct: scoreScholarship(s, profile)}))
+    .filter(m => m.pct !== null)
+    .sort((a,b) => b.pct - a.pct);
+
+  const resultsArea = document.getElementById('results-area');
+
+  if (matches.length === 0){
+    resultsArea.innerHTML = `
+      <div class="results-meta"><h3>Your matches</h3></div>
+      <div class="empty-state">No scheme in the register clears every eligibility field for this exact profile.<br>Try widening income, or check the full register below — some schemes vary by year.</div>`;
+  } else {
+    resultsArea.innerHTML = `
+      <div class="results-meta"><h3>Your matches</h3></div>
+      <div class="card-grid">${matches.map(m => cardHTML(m.schol, m.pct)).join('')}</div>`;
+  }
+
+  resultsArea.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ============ BROWSE / SEARCH ============ */
+let activeFilter = 'all';
+let searchTerm = '';
+
+function renderBrowse(){
+  const grid = document.getElementById('browse-grid');
+  let list = SCHOLARSHIPS;
+
+  if (activeFilter !== 'all') list = list.filter(s => s.level === activeFilter);
+  if (searchTerm) {
+    const t = searchTerm.toLowerCase();
+    list = list.filter(s => s.name.toLowerCase().includes(t) || s.desc.toLowerCase().includes(t));
+  }
+
+  if (list.length === 0){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No schemes match “${searchTerm}”. Try a different term.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(s => cardHTML(s, null)).join('');
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeFilter = chip.dataset.filter;
+    renderBrowse();
+  });
+});
+
+document.getElementById('search-box').addEventListener('input', (e) => {
+  searchTerm = e.target.value.trim();
+  renderBrowse();
+});
+
+renderBrowse();
+</script>
+</body>
+</html>
